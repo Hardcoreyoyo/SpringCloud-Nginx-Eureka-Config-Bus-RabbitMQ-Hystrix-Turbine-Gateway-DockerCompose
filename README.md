@@ -47,6 +47,8 @@ docker-compose up -d
 <br>
 <br>
 
+### Api
+
 | api | Service |
 | :----: | :----: |
 | localhost:80 | Nginx |
@@ -90,6 +92,8 @@ docker-compose up -d
 <br>
 
 ## Best Further
-
-1. Eureka Cluster with Nginx 
+1. Config Cluster with Spring security
+2. Eureka Cluster with Spring security
+3. Nginx with keepAlive 
 ![](./images/bestFuther.png)
+![](./images/bestFuther2.png)

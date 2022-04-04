@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ServiceSMS
+  cloud:
+    config:
+      label: master
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: SpringServiceConfig
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://se1:8761/eureka/eureka/
+
+#為了實現高可用，把 config server 作為 eureka client 註冊到 eureka 集群。
+#所以我們的其他本地服務想找到 config server 獲取配置，
+#必須先找到 eureka 服務註冊中心，才能找到 Config Server
+#所以 eureka 客戶端配置必須放在本地服務中才行，就不放到 github 上了
+
+
+#      username: yoyo
+#      password: yoyo1234

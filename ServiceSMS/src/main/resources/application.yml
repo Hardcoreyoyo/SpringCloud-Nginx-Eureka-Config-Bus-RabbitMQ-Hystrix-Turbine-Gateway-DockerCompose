@@ -1,0 +1,14 @@
+#server:
+#  port: 8080
+#
+#spring:
+#  application:
+#    name: Service-SMS
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
+#
+#feign:
+#  okhttp:
+#    enabled: true

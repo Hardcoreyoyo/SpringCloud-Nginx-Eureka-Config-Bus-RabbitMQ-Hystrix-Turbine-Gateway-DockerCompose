@@ -1,0 +1,20 @@
+#server:
+#  port: 8761
+#  servlet:
+#    context-path: /eureka
+#
+#spring:
+#  application:
+#    name: eureka-server
+#
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    #是否從其他實例獲取服務註冊信息，因為這是一個單節點的EurekaServer，不需要同步其他的EurekaServer節點的數據，所以設置為false
+#    fetch-registry: false
+#    #表示是否向eureka註冊服務，即在自己的eureka中註冊自己，默認為true，此處應該設置為false
+#    register-with-eureka: false
+#    service-url: #註冊發現中心訪問地址: http://localhost:8761/eureka/
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+#

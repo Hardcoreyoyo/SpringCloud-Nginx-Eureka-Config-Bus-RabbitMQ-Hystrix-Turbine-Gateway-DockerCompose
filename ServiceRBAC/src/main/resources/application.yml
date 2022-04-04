@@ -1,0 +1,14 @@
+#server:
+#  port: 8401
+
+#spring:
+#  application:
+#    name: Service-RBAC
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848
+
+#feign:
+#  okhttp:
+#    enabled: true

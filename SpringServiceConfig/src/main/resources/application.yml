@@ -1,0 +1,62 @@
+server:
+  port: 8771
+
+spring:
+  application:
+    name: SpringServiceConfig
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/Hardcoreyoyo/SpringCloudConfigDev
+          searchPaths: Servervice-Config-Repo-Git # 遠端 config folder
+  rabbitmq:
+    host: mq
+    port: 5672
+    username: root
+    password: admin1234
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://se1:8761/eureka/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+
+
+#      exposure: #版本問題只單獨暴露 bus-refresh 不生效
+#        include:  bus-refresh
+
+
+
+
+
+#  security:
+#    basic:
+#      enabled: true
+#    user:
+#      name: yoyo
+#      password: yoyo1234
+
+
+
+#  通過 POST 請求發送到 http://localhost:8401/actuator/refresh，
+#  觸發 port: 8401 service git 配置進行刷新
+#  http://localhost:8401/actuator/refresh 不必在 body 加上 json 資料 即可刷新
+
+
+#eureka:
+#  client:
+#    serviceUrl:
+#      register-with-eureka: true
+#      fetch-registry: true
+#      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/,http://localhost:8763/eureka/
+#      defaultZone: http://se1:8761/eureka/,http://se2:8762/eureka/,http://se3:8763/eureka/
+
+

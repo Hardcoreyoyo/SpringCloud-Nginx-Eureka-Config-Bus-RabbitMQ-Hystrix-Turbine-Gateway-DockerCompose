@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: Gateway
+  cloud:
+    config:
+      label: master
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: SpringServiceConfig
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://se1:8761/eureka/eureka/

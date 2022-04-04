@@ -1,0 +1,36 @@
+server:
+  port: 8773
+
+spring:
+  application:
+    name: turbine-server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://se1:8761/eureka/eureka/
+
+turbine:
+  app-config: SERVICESMS,SERVICERBAC,GATEWAY
+  cluster-name-expression: new String("default")
+  combine-host-port: true
+
+#  turbine.app-config
+#  參數指定了需要收集監控信息的服務名，
+#  多個服務名之間用逗號分隔
+#
+#  turbine.combine-host-port
+#  參數設置為true，
+#  可以讓同一主機上的服務通過主機名與端口號的組合來進行區分，
+#  默認情況下會以host 來區分不同的服務，這會使得在本地調試的時候，
+#  本機上的不同服務聚合成一個服務來統計。
+#
+#  turbine.cluster-name-expression
+#  參數指定了集群名稱為default，
+#  當我們服務數量非常多的時候，
+#  可以啟動多個Turbine 服務來構建不同的聚合集群，
+#  而該參數可以用來區分這些不同的聚合集群，
+#  同時該參數值可以在Hystrix 儀錶盤中用來定位不同的聚合集群，
+#  只需要在Hystrix Stream 的URL 中通過cluster 參數來指定；
+#  注意：new String("default")這個一定要用String 來包一下，
+#  否則啟動的時候會拋出異常：

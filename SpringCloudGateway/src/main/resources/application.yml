@@ -1,0 +1,19 @@
+#spring:
+#  cloud:
+#    sentinel:
+#      filter:
+#        enable: false
+#      eager: true
+#      transport:
+#        port: 8719
+#        dashboard: sentinel:8858
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#      routes:
+#        - id: HardcoreyoyoGateWay-Service-SMS
+#          # uri: lb://Service-SMS
+#          uri: https://www.google.com.tw/
+#          predicates:
+#            - Path=/

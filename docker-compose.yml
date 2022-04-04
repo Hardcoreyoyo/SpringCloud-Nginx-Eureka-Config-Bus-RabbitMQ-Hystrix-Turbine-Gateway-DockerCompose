@@ -1,0 +1,154 @@
+version: '3'
+
+services:
+
+  mq:
+    image: rabbitmq:3.9.14-management-alpine
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=admin1234
+    ports:
+      - "15672:15672"
+      - "5672:5672"  
+    container_name: rabbitmq
+    networks:
+      - NetflixNet
+
+  se1:
+    build:
+      context: ./ServiceEureka/target
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - SERVER_PORT=8761
+      - SPRING_PROFILES_ACTIVE=peer1
+    ports:
+      - "8761:8761"
+    depends_on:
+      - mq  
+    container_name: service-eureka-peer1
+    networks:
+      - NetflixNet
+
+  config:
+    build:
+      context: ./SpringServiceConfig/target
+      dockerfile: Dockerfile
+    command: ["/app/wait-for.sh", "se1:8761", "--", "java", "-jar", "/app/SpringServiceConfig-SSC1.0.0.jar"]
+    restart: always
+    environment:
+      - SERVER_PORT=8771
+    ports:
+      - "8771:8771" 
+    depends_on:
+      - se1 
+    container_name: service-config
+    networks:
+      - NetflixNet
+
+  turbine:
+    build:
+      context: ./ServiceTurbine/target
+      dockerfile: Dockerfile
+    command: ["/app/wait-for.sh", "se1:8761", "--", "java", "-jar", "/app/ServiceTurbine-ST1.0.0.jar"]
+    restart: always
+    depends_on:
+      - se1 
+    environment:
+      - SERVER_PORT=8773
+    ports:
+      - "8773:8773" 
+    container_name: service-turbine
+    networks:
+      - NetflixNet
+
+  hystrix:
+    build:
+      context: ./ServiceHystrixDashboard/target
+      dockerfile: Dockerfile
+    command: ["/app/wait-for.sh", "turbine:8773", "--", "java", "-jar", "/app/ServiceHystrixDashboard-SHD1.0.0.jar"]
+    restart: always
+    depends_on:
+      - turbine 
+    environment:
+      - SERVER_PORT=8772
+    ports:
+      - "8772:8772" 
+    container_name: service-hystrix
+    networks:
+      - NetflixNet
+
+  rbac:
+    build:
+      context: ./ServiceRBAC/target
+      dockerfile: Dockerfile
+    command: ["/app/wait-for.sh", "config:8771", "--", "java", "-jar", "/app/SpringCloudEurekaServiceRBAC-ServiceRBAC1.0.0.jar"]
+    restart: always
+    depends_on:
+      - mq
+      - se1 
+      - config
+      - turbine
+      - hystrix
+    container_name: service-rbac
+    networks:
+      - NetflixNet
+
+  sms:
+    build:
+      context: ./ServiceSMS/target
+      dockerfile: Dockerfile
+    command: ["/app/wait-for.sh", "rbac:8401", "--", "java", "-jar", "/app/ServiceSMS-SSMS1.0.0.jar"]
+    restart: always
+    depends_on:
+      - mq
+      - se1 
+      - config
+      - turbine
+      - hystrix
+      - rbac
+    container_name: service-sms
+    networks:
+      - NetflixNet
+
+  gateway:
+    build:
+      context: ./SpringCloudGateway/target
+      dockerfile: Dockerfile
+    command: ["/app/wait-for.sh", "sms:8402", "--", "java", "-jar", "/app/SpringCloudGateway-SCG1.0.0.jar"]
+    restart: always
+    depends_on:
+      - mq
+      - se1 
+      - config
+      - turbine
+      - hystrix
+      - rbac
+      - sms
+    container_name: service-gateway
+    networks:
+      - NetflixNet
+
+  nginx:
+    image: nginx:alpine
+    container_name: docker-nginx
+    depends_on:
+      - mq
+      - se1 
+      - config
+      - turbine
+      - hystrix
+      - rbac
+      - sms
+      - gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-data/conf.d:/etc/nginx/conf.d
+    networks:
+      - NetflixNet
+
+networks:
+  NetflixNet:
+    driver: bridge

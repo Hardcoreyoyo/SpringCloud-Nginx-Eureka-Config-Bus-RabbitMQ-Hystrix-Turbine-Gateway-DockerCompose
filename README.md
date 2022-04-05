@@ -14,7 +14,7 @@
 
 ### Execute
 ```
-cd SpringCloud-Nginx-Eureka-Config-Bus-RabbitMQ-Hystrix-Turbine-Gateway-DockerCompose    (Folder)
+cd SpringCloud-Nginx-Eureka-Config-Bus-RabbitMQ-Hystrix-Turbine-Gateway-DockerCompose     (Folder)
 ```
 ```
 docker-compose up -d
